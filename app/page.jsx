@@ -297,12 +297,12 @@ const CERTIFICATIONS = [
 
 const BEYOND_WORK = [
   { title: "Animal Rescue", caption: "Fostered 9 rescued puppies across 2 rescues with Animal Rescue Community, Pune — all found homes.", img: "/images/interests/animal-rescue.jpg", color: "volt", gallery: ["/images/interests/animal-rescue/rescue-1.jpg"] },
-  { title: "Marathons", caption: "Finished the HIA Marathon 2024 — a 5km run, medal and all.", img: "/images/interests/marathons.jpg", color: "flare", gallery: ["/images/interests/marathons/marathon-1.jpg", "/images/interests/marathons/marathon-2.jpg", "/images/interests/marathons/marathon-3.jpg"] },
+  { title: "Marathons", caption: "Finished the HIA Marathon 2024 — a 5km run, medal and all.", img: "/images/interests/marathons.jpg", color: "flare", gallery: ["/images/interests/marathons/marathon-1.jpg", "/images/interests/marathons/marathon-2.jpg", "/images/interests/marathons/marathon-3.jpg", "/images/interests/marathons/marathon-4.jpg"] },
   { title: "Cycling", caption: "Completed the #AplaPune Cyclothon — 26km in 1h 40m.", img: "/images/interests/cycling.jpg", color: "cyan", gallery: ["/images/interests/cycling/cycling-1.jpg"] },
-  { title: "Travelling", caption: "Chasing rooftop views and cobblestone streets — Montmartre, Paris.", img: "/images/interests/travelling.jpg", color: "violet", gallery: Array.from({ length: 12 }, (_, i) => `/images/interests/travelling/travel-${i + 1}.jpg`) },
-  { title: "Photography", caption: "Sunsets are the one thing I'll always stop to shoot.", img: "/images/interests/photography.jpg", color: "volt", gallery: Array.from({ length: 14 }, (_, i) => `/images/interests/photography/photo-${i + 1}.jpg`) },
+  { title: "Travelling", caption: "Chasing rooftop views and cobblestone streets — Montmartre, Paris.", img: "/images/interests/travelling.jpg", color: "violet", gallery: Array.from({ length: 13 }, (_, i) => `/images/interests/travelling/travel-${i + 1}.jpg`) },
+  { title: "Photography", caption: "Sunsets are the one thing I'll always stop to shoot.", img: "/images/interests/photography.jpg", color: "volt", gallery: Array.from({ length: 18 }, (_, i) => `/images/interests/photography/photo-${i + 1}.jpg`) },
   { title: "Badminton", caption: "Weeknight badminton, usually until the lights go out.", img: "/images/interests/badminton.jpg", color: "flare", gallery: ["/images/interests/badminton/badminton-1.jpg"] },
-  { title: "Sketching", caption: "Pencil sketches in the margins of busy weeks.", img: "/images/interests/sketching.jpg", color: "cyan", gallery: Array.from({ length: 7 }, (_, i) => `/images/interests/sketching/sketch-${i + 1}.jpg`) },
+  { title: "Sketching", caption: "Pencil sketches in the margins of busy weeks.", img: "/images/interests/sketching.jpg", color: "cyan", gallery: Array.from({ length: 8 }, (_, i) => `/images/interests/sketching/sketch-${i + 1}.jpg`) },
 ];
 
 const ACADEMIC = [
@@ -528,11 +528,11 @@ export default function Portfolio() {
             transition: `background 0.3s ${EASE}`,
           }}
         />
-        {/* Hero photo slot — pinned to top-right, independent of text column height */}
+        {/* Hero photo — pinned to top-right, independent of text column height */}
         <div className="hidden md:block absolute top-40 right-6 md:right-12 z-10">
           <Reveal delay={220}>
-            <div {...view} className="transition-transform duration-300 hover:-rotate-1 hover:scale-[1.02]">
-              <PhotoSlot label="Hero photo" className="w-36" />
+            <div {...view} className="transition-transform duration-300 hover:-rotate-1 hover:scale-[1.02] rounded-2xl overflow-hidden border w-36" style={{ borderColor: TOKENS.border, aspectRatio: "4 / 5" }}>
+              <img src="/images/hero-photo.jpg" alt="Sakshi Sakle at Warwick Business School" className="w-full h-full object-cover" />
             </div>
           </Reveal>
         </div>
