@@ -302,7 +302,7 @@ const BEYOND_WORK = [
   { title: "Travelling", caption: "Chasing rooftop views and cobblestone streets — Montmartre, Paris.", img: "/images/interests/travelling.jpg", color: "violet", gallery: Array.from({ length: 13 }, (_, i) => `/images/interests/travelling/travel-${i + 1}.jpg`) },
   { title: "Photography", caption: "Sunsets are the one thing I'll always stop to shoot.", img: "/images/interests/photography.jpg", color: "volt", gallery: Array.from({ length: 18 }, (_, i) => `/images/interests/photography/photo-${i + 1}.jpg`) },
   { title: "Badminton", caption: "Weeknight badminton, usually until the lights go out.", img: "/images/interests/badminton.jpg", color: "flare", gallery: ["/images/interests/badminton/badminton-1.jpg"] },
-  { title: "Sketching", caption: "Pencil sketches in the margins of busy weeks.", img: "/images/interests/sketching.jpg", color: "cyan", gallery: Array.from({ length: 8 }, (_, i) => `/images/interests/sketching/sketch-${i + 1}.jpg`) },
+  { title: "Sketching", caption: "Pencil sketches in the margins of busy weeks.", img: "/images/interests/sketching-cover-v2.jpg", color: "cyan", gallery: Array.from({ length: 8 }, (_, i) => `/images/interests/sketching/sketch-${i + 1}.jpg`) },
 ];
 
 const ACADEMIC = [
@@ -528,16 +528,7 @@ export default function Portfolio() {
             transition: `background 0.3s ${EASE}`,
           }}
         />
-        {/* Hero photo — pinned to top-right, independent of text column height */}
-        <div className="hidden md:block absolute top-40 right-6 md:right-12 z-10">
-          <Reveal delay={220}>
-            <div {...view} className="transition-transform duration-300 hover:-rotate-1 hover:scale-[1.02] rounded-2xl overflow-hidden border w-36" style={{ borderColor: TOKENS.border, aspectRatio: "4 / 5" }}>
-              <img src="/images/hero-photo.jpg" alt="Sakshi Sakle at Warwick Business School" className="w-full h-full object-cover" />
-            </div>
-          </Reveal>
-        </div>
-
-        <div className="relative">
+        <div className="relative flex items-start gap-10">
           <div className="max-w-3xl">
             <Reveal>
               <p className="font-mono text-xs md:text-sm uppercase tracking-[0.35em] mb-6" style={{ color: TOKENS.volt }}>
@@ -576,6 +567,15 @@ export default function Portfolio() {
                     View CV
                   </a>
                 </Magnetic>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Hero photo — centered in the remaining space between the text and the page edge */}
+          <div className="hidden md:flex flex-1 justify-center pt-6">
+            <Reveal delay={220}>
+              <div {...view} className="transition-transform duration-300 hover:-rotate-1 hover:scale-[1.02] rounded-2xl overflow-hidden border w-56" style={{ borderColor: TOKENS.border, aspectRatio: "4 / 5" }}>
+                <img src="/images/hero-photo.jpg" alt="Sakshi Sakle at Warwick Business School" className="w-full h-full object-cover" />
               </div>
             </Reveal>
           </div>
