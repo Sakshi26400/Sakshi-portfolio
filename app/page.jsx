@@ -268,7 +268,7 @@ const JOURNEY = [
   { year: "2025", tag: "BUSINESS", org: "Warwick Business School", detail: "MSc Management — strategy, customers, leadership.", color: "cyan" },
   { year: "2026", tag: "AI", org: "HEC Paris", detail: "Data Science & AI in Business, incl. Station F exposure.", color: "violet" },
   { year: "2026", tag: "PRODUCT", org: "Tagline", detail: "AI Strategy & Product Intern.", color: "volt" },
-  { year: "NEXT", tag: "PRODUCT & AI", org: "", detail: "", isNext: true, color: "volt" },
+  { year: "NEXT", tag: "PRODUCT · DATA · AI", org: "", detail: "", isNext: true, color: "volt" },
 ];
 
 const TOOLKIT = [
