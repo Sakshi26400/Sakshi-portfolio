@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { ArrowRight, ArrowUpRight, Mail, ImagePlus, Car, Flag, Search, Target, Hammer, BarChart3, RefreshCw, GraduationCap, FileText } from "lucide-react";
 
 // If any one section throws for any reason, it fails quietly on its own —
@@ -296,13 +296,13 @@ const CERTIFICATIONS = [
 ];
 
 const BEYOND_WORK = [
-  { title: "Animal Rescue", caption: "Fostered 9 rescued puppies across 2 rescues with Animal Rescue Community, Pune — all found homes.", img: "/images/interests/animal-rescue.jpg", color: "volt" },
-  { title: "Marathons", caption: "Finished the HIA Marathon 2024 — a 5km run, medal and all.", img: "/images/interests/marathons.jpg", color: "flare" },
-  { title: "Cycling", caption: "Completed the #AplaPune Cyclothon — 26km in 1h 40m.", img: "/images/interests/cycling.jpg", color: "cyan" },
-  { title: "Travelling", caption: "Chasing rooftop views and cobblestone streets — Montmartre, Paris.", img: "/images/interests/travelling.jpg", color: "violet" },
-  { title: "Photography", caption: "Sunsets are the one thing I'll always stop to shoot.", img: "/images/interests/photography.jpg", color: "volt" },
-  { title: "Badminton", caption: "Weeknight badminton, usually until the lights go out.", img: "/images/interests/badminton.jpg", color: "flare" },
-  { title: "Sketching", caption: "Pencil sketches in the margins of busy weeks.", img: "/images/interests/sketching.jpg", color: "cyan" },
+  { title: "Animal Rescue", caption: "Fostered 9 rescued puppies across 2 rescues with Animal Rescue Community, Pune — all found homes.", img: "/images/interests/animal-rescue.jpg", color: "volt", gallery: ["/images/interests/animal-rescue/rescue-1.jpg"] },
+  { title: "Marathons", caption: "Finished the HIA Marathon 2024 — a 5km run, medal and all.", img: "/images/interests/marathons.jpg", color: "flare", gallery: ["/images/interests/marathons/marathon-1.jpg", "/images/interests/marathons/marathon-2.jpg", "/images/interests/marathons/marathon-3.jpg"] },
+  { title: "Cycling", caption: "Completed the #AplaPune Cyclothon — 26km in 1h 40m.", img: "/images/interests/cycling.jpg", color: "cyan", gallery: ["/images/interests/cycling/cycling-1.jpg"] },
+  { title: "Travelling", caption: "Chasing rooftop views and cobblestone streets — Montmartre, Paris.", img: "/images/interests/travelling.jpg", color: "violet", gallery: Array.from({ length: 12 }, (_, i) => `/images/interests/travelling/travel-${i + 1}.jpg`) },
+  { title: "Photography", caption: "Sunsets are the one thing I'll always stop to shoot.", img: "/images/interests/photography.jpg", color: "volt", gallery: Array.from({ length: 14 }, (_, i) => `/images/interests/photography/photo-${i + 1}.jpg`) },
+  { title: "Badminton", caption: "Weeknight badminton, usually until the lights go out.", img: "/images/interests/badminton.jpg", color: "flare", gallery: ["/images/interests/badminton/badminton-1.jpg"] },
+  { title: "Sketching", caption: "Pencil sketches in the margins of busy weeks.", img: "/images/interests/sketching.jpg", color: "cyan", gallery: Array.from({ length: 7 }, (_, i) => `/images/interests/sketching/sketch-${i + 1}.jpg`) },
 ];
 
 const ACADEMIC = [
@@ -449,6 +449,8 @@ export default function Portfolio() {
   const { pos, variant, setVariant, enabled } = useCursor();
   const [scrolled, setScrolled] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [activeGallery, setActiveGallery] = useState(null);
+  const closeGallery = useCallback(() => setActiveGallery(null), []);
   const heroRef = useRef(null);
   const glow = useMouseGlow(heroRef);
 
@@ -491,6 +493,7 @@ export default function Portfolio() {
       `}</style>
 
       <Cursor pos={pos} variant={variant} enabled={enabled} />
+      <GalleryLightbox item={activeGallery} onClose={closeGallery} />
 
       <div className="fixed top-0 left-0 right-0 h-[3px] z-50">
         <div style={{ width: `${progress * 100}%`, height: "100%", background: TOKENS.flare, boxShadow: `0 0 12px ${TOKENS.flare}`, transition: "width 0.1s linear" }} />
@@ -613,7 +616,7 @@ export default function Portfolio() {
         </Reveal>
         <div className="grid md:grid-cols-2 gap-4">
           {CASE_STUDIES.map((cs, i) => (
-            <Reveal key={cs.title} delay={i * 100}>
+            <Reveal key={cs.title} delay={i * 100} className="h-full">
               <CaseStudyCard cs={cs} view={view} />
             </Reveal>
           ))}
@@ -635,15 +638,10 @@ export default function Portfolio() {
 
       {/* JOURNEY */}
       <section id="journey" className="px-6 md:px-12 py-28 md:py-36">
-        <div className="flex items-start justify-between gap-8 flex-wrap mb-16">
+        <div className="mb-16">
           <Reveal>
             <p className="font-mono text-xs uppercase tracking-widest mb-3" style={{ color: TOKENS.volt }}>05 — The Journey</p>
             <h2 className="font-display text-5xl md:text-7xl font-bold tracking-tight">From Code to Product</h2>
-          </Reveal>
-          <Reveal delay={120} className="hidden md:block">
-            <div {...view} className="transition-transform duration-300 hover:rotate-1 hover:scale-[1.02]">
-              <PhotoSlot label="Journey photo" ratio="1 / 1" className="w-28" />
-            </div>
           </Reveal>
         </div>
 
@@ -667,7 +665,7 @@ export default function Portfolio() {
 
         <div className="grid md:grid-cols-2 gap-4 mb-4">
           {ACADEMIC.map((a, i) => (
-            <Reveal key={a.title} delay={i * 90}>
+            <Reveal key={a.title} delay={i * 90} className="h-full">
               <AcademicCard item={a} view={view} />
             </Reveal>
           ))}
@@ -687,7 +685,7 @@ export default function Portfolio() {
         </Reveal>
         <div className="grid md:grid-cols-3 gap-5">
           {DEGREES.map((d, i) => (
-            <Reveal key={d.institution} delay={i * 80}>
+            <Reveal key={d.institution} delay={i * 80} className="h-full">
               <DegreeCard d={d} />
             </Reveal>
           ))}
@@ -702,7 +700,7 @@ export default function Portfolio() {
         </Reveal>
         <div className="grid md:grid-cols-3 gap-5">
           {TOOLKIT.map((t, i) => (
-            <Reveal key={t.group} delay={i * 70}>
+            <Reveal key={t.group} delay={i * 70} className="h-full">
               <ToolkitCard t={t} />
             </Reveal>
           ))}
@@ -774,7 +772,7 @@ export default function Portfolio() {
           {BEYOND_WORK.map((b, i) => (
             <Reveal key={b.title} delay={i * 70}>
               <SectionBoundary>
-                <BeyondWorkCard b={b} view={view} />
+                <BeyondWorkCard b={b} view={view} onOpen={setActiveGallery} />
               </SectionBoundary>
             </Reveal>
           ))}
@@ -956,7 +954,7 @@ function DegreeCard({ d }) {
   );
 }
 
-function BeyondWorkCard({ b, view }) {
+function BeyondWorkCard({ b, view, onOpen }) {
   const [hover, setHover] = useState(false);
   const accent = TOKENS[b.color];
   return (
@@ -964,7 +962,11 @@ function BeyondWorkCard({ b, view }) {
       {...view}
       onMouseEnter={(e) => { setHover(true); view.onMouseEnter(e); }}
       onMouseLeave={(e) => { setHover(false); view.onMouseLeave(e); }}
-      className="relative rounded-2xl overflow-hidden border"
+      onClick={() => onOpen(b)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === "Enter") onOpen(b); }}
+      className="relative rounded-2xl overflow-hidden border cursor-pointer"
       style={{
         aspectRatio: "4 / 5",
         borderColor: hover ? accent : TOKENS.border,
@@ -982,6 +984,14 @@ function BeyondWorkCard({ b, view }) {
         className="absolute inset-0"
         style={{ background: `linear-gradient(180deg, transparent 40%, ${TOKENS.bg}ee 100%)` }}
       />
+      {b.gallery && b.gallery.length > 1 && (
+        <span
+          className="absolute top-3 right-3 font-mono text-[10px] uppercase tracking-widest px-2 py-1 rounded-full"
+          style={{ background: `${TOKENS.bg}cc`, color: accent, border: `1px solid ${accent}55` }}
+        >
+          {b.gallery.length} photos
+        </span>
+      )}
       <div className="absolute bottom-0 left-0 right-0 p-5">
         <p className="font-display text-lg font-bold mb-1" style={{ color: accent }}>{b.title}</p>
         <p
@@ -1001,6 +1011,54 @@ function BeyondWorkCard({ b, view }) {
   );
 }
 
+function GalleryLightbox({ item, onClose }) {
+  useEffect(() => {
+    if (!item) return;
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [item, onClose]);
+
+  if (!item) return null;
+  const accent = TOKENS[item.color];
+
+  return (
+    <div
+      className="fixed inset-0 z-[200] flex flex-col"
+      style={{ background: `${TOKENS.bg}f5`, backdropFilter: "blur(6px)" }}
+      onClick={onClose}
+    >
+      <div className="flex items-center justify-between px-6 md:px-12 py-6 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+        <div>
+          <p className="font-display text-2xl font-bold" style={{ color: accent }}>{item.title}</p>
+          <p className="text-sm mt-1" style={{ color: TOKENS.muted }}>{item.caption}</p>
+        </div>
+        <button
+          onClick={onClose}
+          aria-label="Close gallery"
+          className="rounded-full w-11 h-11 flex items-center justify-center flex-shrink-0 border"
+          style={{ borderColor: TOKENS.border, color: TOKENS.paper }}
+        >
+          ✕
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto px-6 md:px-12 pb-12" onClick={(e) => e.stopPropagation()}>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto">
+          {item.gallery.map((src, i) => (
+            <div key={src} className="rounded-xl overflow-hidden border" style={{ borderColor: TOKENS.border }}>
+              <img src={src} alt={`${item.title} ${i + 1}`} className="w-full h-full object-cover" style={{ aspectRatio: "4 / 3" }} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ToolkitCard({ t }) {
   const [hover, setHover] = useState(false);
   const accent = TOKENS[t.color];
@@ -1008,7 +1066,7 @@ function ToolkitCard({ t }) {
     <div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="rounded-2xl overflow-hidden border"
+      className="rounded-2xl overflow-hidden border h-full flex flex-col"
       style={{
         borderColor: hover ? accent : TOKENS.border,
         transform: hover ? "translateY(-6px)" : "translateY(0px)",
@@ -1019,7 +1077,7 @@ function ToolkitCard({ t }) {
       <div className="px-6 py-5" style={{ background: accent }}>
         <h3 className="font-display text-lg font-bold" style={{ color: TOKENS.bg }}>{t.group}</h3>
       </div>
-      <div className="px-6 py-6" style={{ background: TOKENS.surface }}>
+      <div className="px-6 py-6 flex-1" style={{ background: TOKENS.surface }}>
         <ul className="space-y-2.5">
           {t.items.map((it) => (
             <li key={it} className="flex items-start gap-2 text-sm" style={{ color: "#C9C9CE" }}>
@@ -1081,7 +1139,7 @@ function AcademicCard({ item, view }) {
       {...view}
       onMouseEnter={(e) => { setHover(true); view.onMouseEnter(e); }}
       onMouseLeave={(e) => { setHover(false); view.onMouseLeave(e); }}
-      className="p-8 min-h-[260px] flex flex-col justify-between rounded-2xl border"
+      className="p-8 min-h-[260px] h-full flex flex-col justify-between rounded-2xl border"
       style={{
         background: hover ? accent : TOKENS.surface,
         borderColor: hover ? accent : TOKENS.border,
@@ -1138,7 +1196,7 @@ function CaseStudyCard({ cs, view }) {
       {...view}
       onMouseEnter={(e) => { setHover(true); view.onMouseEnter(e); }}
       onMouseLeave={(e) => { setHover(false); view.onMouseLeave(e); }}
-      className="p-8 md:p-10 min-h-[300px] flex flex-col justify-between rounded-2xl border"
+      className="p-8 md:p-10 min-h-[300px] h-full flex flex-col justify-between rounded-2xl border"
       style={{
         background: hover ? accent : TOKENS.surface,
         borderColor: hover ? accent : TOKENS.border,
@@ -1157,9 +1215,6 @@ function CaseStudyCard({ cs, view }) {
         <p className="font-mono text-[11px] uppercase tracking-widest opacity-60 mb-1">Impact</p>
         <p className="text-sm">{cs.impact}</p>
       </div>
-      <span className="inline-flex items-center gap-2 text-sm font-semibold mt-8">
-        Read Case Study <ArrowRight size={14} />
-      </span>
     </div>
   );
 }
