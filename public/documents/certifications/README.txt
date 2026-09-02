@@ -3,6 +3,7 @@ so the links on the homepage work:
 
 dell-technologies-game-changer-award.pdf
 dell-itdp-alumni-champion.pdf
+tagline-outstanding-recognition-award.pdf
 mckinsey-forward-program.pdf
 cobs-international-certificate.pdf
 product-management-certification.pdf

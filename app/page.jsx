@@ -268,7 +268,7 @@ const JOURNEY = [
   { year: "2025", tag: "BUSINESS", org: "Warwick Business School", detail: "MSc Management — strategy, customers, leadership.", color: "cyan" },
   { year: "2026", tag: "AI", org: "HEC Paris", detail: "Data Science & AI in Business, incl. Station F exposure.", color: "violet" },
   { year: "2026", tag: "PRODUCT", org: "Tagline", detail: "AI Strategy & Product Intern.", color: "volt" },
-  { year: "NEXT", tag: "PRODUCT MANAGEMENT", org: "", detail: "", isNext: true, color: "volt" },
+  { year: "NEXT", tag: "PRODUCT & AI", org: "", detail: "", isNext: true, color: "volt" },
 ];
 
 const TOOLKIT = [
@@ -283,6 +283,7 @@ const TOOLKIT = [
 const AWARDS = [
   { name: "Dell Technologies Game Changer Award", color: "volt", doc: "/documents/certifications/dell-technologies-game-changer-award.pdf" },
   { name: "Dell ITDP Alumni Champion — Top 15%", color: "flare", doc: "/documents/certifications/dell-itdp-alumni-champion.pdf" },
+  { name: "Outstanding Recognition Award — Tagline", color: "cyan", doc: "/documents/certifications/tagline-outstanding-recognition-award.pdf" },
 ];
 
 const CERTIFICATIONS = [
@@ -296,7 +297,7 @@ const CERTIFICATIONS = [
 ];
 
 const BEYOND_WORK = [
-  { title: "Animal Rescue", caption: "Fostered 9 rescued puppies across 2 rescues with Animal Rescue Community, Pune — all found homes.", img: "/images/interests/animal-rescue.jpg", color: "volt", gallery: ["/images/interests/animal-rescue/rescue-1.jpg"] },
+  { title: "Animal Rescue", caption: "Fostered 9 rescued puppies across 2 rescues with Animal Rescue Community, Pune — all found homes.", img: "/images/interests/animal-rescue.jpg", color: "volt", gallery: Array.from({ length: 10 }, (_, i) => `/images/interests/animal-rescue/rescue-${i + 1}.jpg`) },
   { title: "Marathons", caption: "Finished the HIA Marathon 2024 — a 5km run, medal and all.", img: "/images/interests/marathons.jpg", color: "flare", gallery: ["/images/interests/marathons/marathon-1.jpg", "/images/interests/marathons/marathon-2.jpg", "/images/interests/marathons/marathon-3.jpg", "/images/interests/marathons/marathon-4.jpg"] },
   { title: "Cycling", caption: "Completed the #AplaPune Cyclothon — 26km in 1h 40m.", img: "/images/interests/cycling.jpg", color: "cyan", gallery: ["/images/interests/cycling/cycling-1.jpg"] },
   { title: "Travelling", caption: "Chasing rooftop views and cobblestone streets — Montmartre, Paris.", img: "/images/interests/travelling.jpg", color: "violet", gallery: Array.from({ length: 13 }, (_, i) => `/images/interests/travelling/travel-${i + 1}.jpg`) },
@@ -574,7 +575,7 @@ export default function Portfolio() {
           {/* Hero photo — centered in the remaining space between the text and the page edge */}
           <div className="hidden md:flex flex-1 justify-center pt-6">
             <Reveal delay={220}>
-              <div {...view} className="transition-transform duration-300 hover:-rotate-1 hover:scale-[1.02] rounded-2xl overflow-hidden border w-56" style={{ borderColor: TOKENS.border, aspectRatio: "4 / 5" }}>
+              <div {...view} className="transition-transform duration-300 hover:-rotate-1 hover:scale-[1.02] rounded-2xl overflow-hidden border w-[336px]" style={{ borderColor: TOKENS.border, aspectRatio: "4 / 5" }}>
                 <img src="/images/hero-photo.jpg" alt="Sakshi Sakle at Warwick Business School" className="w-full h-full object-cover" />
               </div>
             </Reveal>
