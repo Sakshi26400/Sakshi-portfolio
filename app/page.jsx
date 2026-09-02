@@ -243,7 +243,7 @@ const PROFILE = [
   { label: "Most Recently", value: "AI Strategy & Product", sub: "Tagline" },
   { label: "Studied", value: "MSc Management", sub: "Warwick Business School" },
   { label: "Background", value: "3+ Years", sub: "Technology & Enterprise Software" },
-  { label: "Focus", value: "Product Management", sub: "& AI Products" },
+  { label: "Focus", value: "Product Management", sub: "AI and Data" },
 ];
 
 const CASE_STUDIES = [
@@ -599,7 +599,7 @@ export default function Portfolio() {
         <div className="grid grid-cols-2 md:grid-cols-4">
           {PROFILE.map((p, i) => (
             <Reveal key={p.label} delay={i * 90}>
-              <div className={`py-10 md:py-14 pr-6 ${i !== 0 ? "md:border-l" : ""}`} style={{ borderColor: TOKENS.border }}>
+              <div className={`py-10 md:py-14 pr-6 ${i !== 0 ? "md:border-l md:pl-6" : ""}`} style={{ borderColor: TOKENS.border }}>
                 <p className="font-mono text-[11px] uppercase tracking-widest mb-3" style={{ color: TOKENS.volt }}>{p.label}</p>
                 <p className="font-display text-xl md:text-2xl font-semibold">{p.value}</p>
                 <p className="text-sm mt-1" style={{ color: TOKENS.muted }}>{p.sub}</p>
@@ -1013,16 +1013,28 @@ function BeyondWorkCard({ b, view, onOpen }) {
 }
 
 function GalleryLightbox({ item, onClose }) {
+  const [zoomedIndex, setZoomedIndex] = useState(null);
+
   useEffect(() => {
     if (!item) return;
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    const onKey = (e) => {
+      if (e.key === "Escape") { zoomedIndex !== null ? setZoomedIndex(null) : onClose(); }
+      if (zoomedIndex !== null && item) {
+        if (e.key === "ArrowRight") setZoomedIndex((z) => (z + 1) % item.gallery.length);
+        if (e.key === "ArrowLeft") setZoomedIndex((z) => (z - 1 + item.gallery.length) % item.gallery.length);
+      }
+    };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
-  }, [item, onClose]);
+  }, [item, onClose, zoomedIndex]);
+
+  useEffect(() => {
+    if (item) setZoomedIndex(null);
+  }, [item]);
 
   if (!item) return null;
   const accent = TOKENS[item.color];
@@ -1047,15 +1059,59 @@ function GalleryLightbox({ item, onClose }) {
           ✕
         </button>
       </div>
-      <div className="flex-1 overflow-y-auto px-6 md:px-12 pb-12" onClick={(e) => e.stopPropagation()}>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto">
-          {item.gallery.map((src, i) => (
-            <div key={src} className="rounded-xl overflow-hidden border" style={{ borderColor: TOKENS.border }}>
-              <img src={src} alt={`${item.title} ${i + 1}`} className="w-full h-full object-cover" style={{ aspectRatio: "4 / 3" }} />
-            </div>
-          ))}
+
+      {zoomedIndex === null ? (
+        <div className="flex-1 overflow-y-auto px-6 md:px-12 pb-12" onClick={(e) => e.stopPropagation()}>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto">
+            {item.gallery.map((src, i) => (
+              <button
+                key={src}
+                onClick={() => setZoomedIndex(i)}
+                className="rounded-xl overflow-hidden border flex items-center justify-center cursor-pointer"
+                style={{ borderColor: TOKENS.border, background: TOKENS.surface, aspectRatio: "4 / 3" }}
+              >
+                <img src={src} alt={`${item.title} ${i + 1}`} className="w-full h-full object-contain" />
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex-1 flex items-center justify-center relative px-6 md:px-16 pb-8" onClick={(e) => e.stopPropagation()}>
+          <img
+            src={item.gallery[zoomedIndex]}
+            alt={`${item.title} ${zoomedIndex + 1}`}
+            className="max-w-full max-h-full object-contain rounded-xl"
+          />
+          {item.gallery.length > 1 && (
+            <>
+              <button
+                onClick={() => setZoomedIndex((z) => (z - 1 + item.gallery.length) % item.gallery.length)}
+                aria-label="Previous photo"
+                className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 rounded-full w-11 h-11 flex items-center justify-center border"
+                style={{ borderColor: TOKENS.border, color: TOKENS.paper, background: `${TOKENS.bg}cc` }}
+              >
+                ←
+              </button>
+              <button
+                onClick={() => setZoomedIndex((z) => (z + 1) % item.gallery.length)}
+                aria-label="Next photo"
+                className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 rounded-full w-11 h-11 flex items-center justify-center border"
+                style={{ borderColor: TOKENS.border, color: TOKENS.paper, background: `${TOKENS.bg}cc` }}
+              >
+                →
+              </button>
+            </>
+          )}
+          <button
+            onClick={() => setZoomedIndex(null)}
+            aria-label="Back to gallery"
+            className="absolute top-2 md:top-4 left-1/2 -translate-x-1/2 font-mono text-[11px] uppercase tracking-widest px-3 py-1.5 rounded-full border"
+            style={{ borderColor: TOKENS.border, color: TOKENS.muted, background: `${TOKENS.bg}cc` }}
+          >
+            {zoomedIndex + 1} / {item.gallery.length} — Back to grid
+          </button>
+        </div>
+      )}
     </div>
   );
 }
