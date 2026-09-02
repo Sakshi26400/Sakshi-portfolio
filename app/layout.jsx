@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export const metadata = {
   title: "Sakshi Sakle | Product, AI & Technology",
   description:
