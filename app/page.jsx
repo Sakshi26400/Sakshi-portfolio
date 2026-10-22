@@ -416,20 +416,22 @@ const DEGREES = [
     institution: "Cummins College of Engineering, Pune",
     period: "Aug 2018 — Jun 2022",
     color: "volt",
+    certificate: "/images/certificates/btech-degree-certificate.jpg",
   },
   {
     degree: "Master of Science",
-    field: "Management",
+    field: "Management — Merit Predicted",
     institution: "Warwick Business School",
     period: "Sep 2025 — Sep 2026",
     color: "flare",
   },
   {
     degree: "Programme",
-    field: "Data Science & AI in Business",
+    field: "Data Science & AI in Business — Distinction",
     institution: "HEC Paris",
     period: "Apr 2026",
     color: "cyan",
+    certificate: "/images/certificates/hec-paris-certificate.jpg",
   },
 ];
 
@@ -512,6 +514,19 @@ export default function Portfolio() {
               {l.label}
             </a>
           ))}
+          <a
+            href="https://www.linkedin.com/in/sakshi-sakle"
+            target="_blank"
+            rel="noopener noreferrer"
+            {...link}
+            aria-label="LinkedIn profile"
+            className="flex items-center gap-2"
+            style={{ color: TOKENS.muted, transition: `color 0.3s ${EASE}` }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = TOKENS.paper; link.onMouseEnter(); }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = TOKENS.muted; link.onMouseLeave(); }}
+          >
+            <LinkedInIcon size={16} />
+          </a>
           <Magnetic strength={0.4}>
             <a href="/documents/Sakshi_Sakle_CV.pdf" download target="_blank" rel="noopener noreferrer" {...link} className="cta-btn px-4 py-2 rounded-full font-medium" style={{ background: TOKENS.volt, color: TOKENS.bg }}>
               CV ↗
@@ -544,8 +559,8 @@ export default function Portfolio() {
             </Reveal>
             <Reveal delay={200}>
               <p className="max-w-xl mt-8 text-lg md:text-xl leading-relaxed" style={{ color: "#C9C9CE" }}>
-                From building enterprise technology to shaping AI product strategy —
-                I work where users, business and technology meet.
+                From building enterprise technology to shaping AI-first product strategy,
+                I thrive at the messy, exciting intersection of users, business and technology.
               </p>
             </Reveal>
             <Reveal delay={300}>
@@ -922,7 +937,20 @@ function StemIcon({ accent, Icon, isLast, hover, flip }) {
 
 function DegreeCard({ d }) {
   const [hover, setHover] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
   const accent = TOKENS[d.color];
+
+  useEffect(() => {
+    if (!zoomed) return;
+    const onKey = (e) => { if (e.key === "Escape") setZoomed(false); };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [zoomed]);
+
   return (
     <div
       onMouseEnter={() => setHover(true)}
@@ -946,11 +974,62 @@ function DegreeCard({ d }) {
       <p className="text-sm mb-1" style={{ color: accent }}>{d.field}</p>
       <p className="text-sm mb-6" style={{ color: TOKENS.muted }}>{d.institution}</p>
 
-      {/* certificate placeholder — ready for uploaded proof */}
-      <div className="mt-auto rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 py-6" style={{ borderColor: TOKENS.border }}>
-        <FileText size={18} style={{ color: TOKENS.muted }} />
-        <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: TOKENS.muted }}>Add certificate</span>
-      </div>
+      {d.certificate ? (
+        <>
+          <button
+            onClick={() => setZoomed(true)}
+            aria-label={`Enlarge ${d.degree} certificate`}
+            className="mt-auto rounded-xl overflow-hidden border relative cursor-zoom-in group"
+            style={{ borderColor: TOKENS.border, background: TOKENS.bg }}
+          >
+            <img
+              src={d.certificate}
+              alt={`${d.degree} certificate — ${d.institution}`}
+              className="w-full h-auto block"
+              style={{ transition: `transform 0.5s ${EASE}` }}
+            />
+            <div
+              className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100"
+              style={{ background: `${TOKENS.bg}66`, transition: `opacity 0.3s ${EASE}` }}
+            >
+              <span
+                className="font-mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full border"
+                style={{ borderColor: accent, color: accent, background: `${TOKENS.bg}cc` }}
+              >
+                Click to enlarge
+              </span>
+            </div>
+          </button>
+
+          {zoomed && (
+            <div
+              className="fixed inset-0 z-[200] flex items-center justify-center px-6 py-10 md:px-16"
+              style={{ background: `${TOKENS.bg}f5`, backdropFilter: "blur(6px)" }}
+              onClick={() => setZoomed(false)}
+            >
+              <img
+                src={d.certificate}
+                alt={`${d.degree} certificate — ${d.institution}, enlarged`}
+                className="max-w-full max-h-full object-contain rounded-xl"
+                style={{ boxShadow: `0 24px 60px ${accent}33` }}
+              />
+              <button
+                onClick={() => setZoomed(false)}
+                aria-label="Close certificate"
+                className="absolute top-5 right-5 md:top-8 md:right-8 rounded-full w-11 h-11 flex items-center justify-center border"
+                style={{ borderColor: TOKENS.border, color: TOKENS.paper, background: `${TOKENS.bg}cc` }}
+              >
+                ✕
+              </button>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="mt-auto rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 py-6" style={{ borderColor: TOKENS.border }}>
+          <FileText size={18} style={{ color: TOKENS.muted }} />
+          <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: TOKENS.muted }}>Add certificate</span>
+        </div>
+      )}
     </div>
   );
 }
